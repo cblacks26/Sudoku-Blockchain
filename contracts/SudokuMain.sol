@@ -43,10 +43,6 @@ contract Sudoku {
     event TokenWithdrawalEvent(address, uint256);
     event ServiceEndEvent(address, uint256);
     
-    function Sudoku (address _owner) public {
-        contract_owner = _owner;
-    }
-    
     enum GameState{
         CREATED,STARTED,CLOSED
     }

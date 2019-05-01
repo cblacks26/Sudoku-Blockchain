@@ -30,3 +30,21 @@
     transform: rotate(360deg);
   }
 }
+.container{
+  width:60%;
+  height:60%;
+  margin:auto auto;
+}
+
+.welcome{
+  display: flex;
+  flex-direction: row;
+  border:thin solid black;
+  border-radius: 25px;
+}
+
+.col{
+  padding-top: 1em;
+  width:50%;
+  text-align: center;
+}
