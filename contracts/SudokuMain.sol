@@ -219,9 +219,12 @@ contract Sudoku {
             if((openGames[i].gameID == playerToGame[msg.sender]) && (openGames[i].endTime > now)){
                 string memory a = substring(openGames[i].solvedPuzzle, _pos, _pos+1);
                 string memory b = _answer;
-                if (keccak256(abi.encodePacked(a))==keccak256(abi.encodePacked(b)) && (openGames[i].isSpotSolved[_pos] == 0)){
-                    openGames[i].isSpotSolved[_pos] = 1;
-                    openGames[i].playersCorrect[msg.sender] += 1;
+                string memory c = substring(openGames[i].currentPuzzle, _pos, _pos+1);
+                if ((keccak256(abi.encodePacked(a))==keccak256(abi.encodePacked(b)))){
+                    if (openGames[i].isSpotSolved[_pos] == 0){
+                        openGames[i].isSpotSolved[_pos] = 1;
+                        openGames[i].playersCorrect[msg.sender] += 1;
+                    }
                     return true;
                 }
             }
