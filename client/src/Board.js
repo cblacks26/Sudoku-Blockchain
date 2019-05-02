@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Square from "./Square";
-class Board extends React.Component {
+class Board extends Component {
     constructor(props){
       super(props);
       this.state = {
@@ -19,7 +19,14 @@ class Board extends React.Component {
     }
     
     updateBoard(x,y,value){
-      
+      var balance;
+      try {
+        balance = this.props.contract.methods.checkToken().call({
+            from: this.props.accounts[0]
+        });
+      } catch (err) {
+          this.setState({ errorMessage: err.message });
+      }
     }
   
     renderBlock(x,block){
