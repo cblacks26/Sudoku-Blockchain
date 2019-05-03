@@ -301,7 +301,7 @@ function main() {
 	print(results);
 	// console.log(randomPuzzle(10));
 }
-main();
+// main();
 
 // References used:
 // http://www.scanraid.com/BasicStrategies.htm
@@ -515,3 +515,4 @@ function chars(string) {
 	}
 	return result;
 }
+export { randomPuzzle, randomInt, vals, solve };
