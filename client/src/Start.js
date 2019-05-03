@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from 'reactstrap';
+import { Button, Container, Jumbotron } from 'reactstrap';
 class Start extends Component {
     constructor(props){
         super(props);

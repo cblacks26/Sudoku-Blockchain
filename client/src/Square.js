@@ -2,16 +2,10 @@ import React, { Component } from "react";
 class Square extends Component {
     constructor(props){
       	super(props);
-      	state = {
-			status: 'disabled',
-			value: this.props.val,
-			pos: this.props.x*9+this.props.y
-      	}
       	this.updateSquare = this.updateSquare.bind(this);
     }
     
     async updateSquare(event){
-		this.setState({ disabled })
 		let result = await this.props.updateBoard(this.state.pos,event.target.value);
 		if(!result){
 			this.setState({ value: 0 });
@@ -19,16 +13,19 @@ class Square extends Component {
     }
 
     renderSquare(){
-		if(this.state.value>0|| this.state.status === 'disabled'){
-				return <input type="text" className="square" key={this.state.pos} defaultValue={this.state.value} disabled/>
+		let id = "cell-"+this.props.pos;
+		let val = this.props.val;
+		if(val==0) val="";
+		if(this.props.value>0){
+				return <input type="text" id={id} key={this.props.pos} defaultValue={this.state.value} disabled/>
 		}else{
-			return <input type="text" className="square" key={this.state.pos} min="1" max="9"
-				value="" onChange={this.updateSquare} />
+			return <input type="text" key={this.props.pos} pattern="[1-9]{1}" min="1" max="9"
+				value={val} onChange={this.updateSquare} />
 		}
     }
     
     render() {
-      return this.renderSquare();
+      return (<td>{this.renderSquare()}</td>);
     }
 }  
 

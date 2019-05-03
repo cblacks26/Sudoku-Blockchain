@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Board from "./Board";
 import Start from "./Start";
 import { randomPuzzle, randomInt, vals, solve } from "./SuGen";
-import SudokuContract from "./contracts/Sudoku.json";
+import Solved from "./contracts/Solved.json";
 import getWeb3 from "./utils/getWeb3";
 
 import "./App.css";
@@ -30,12 +30,13 @@ class App extends Component {
 
             // Get the contract instance.
             const networkId = await web3.eth.net.getId();
-            const deployedNetwork = SudokuContract.networks[networkId];
-            const instance = new web3.eth.Contract(SudokuContract.abi,deployedNetwork && deployedNetwork.address,);
+            const deployedNetwork = Solved.networks[networkId];
+            const instance = new web3.eth.Contract(Solved.abi,deployedNetwork && deployedNetwork.address,);
 
             // Set web3, accounts, and contract to the state, and then proceed with an
             // example of interacting with the contract's methods.
-            this.setState({ web3, accounts, contract: instance }, this.getGame());
+			this.setState({ web3, accounts, contract: instance });
+			this.getGame();
         } catch (error) {
             // Catch any errors for any of the above operations.
             alert(
@@ -64,24 +65,16 @@ class App extends Component {
         let board = randomPuzzle(20);
         let values = solve(board);
         let results = vals(values);
-        let puzzle = [];
-		let finished = [];
-		for(let i = 0; i  < results.length; i++){
-			let puzzleChar = board[i];
-			let answerChar = results[i];
-			if(puzzleChar!=='.'){
-                puzzle.push(0);
-            }else{
-                puzzle.push(parseInt(puzzleChar));
+        let puzzle = "";
+		for(let char in board){
+			let res = char;
+			if(char==='.'){
+                res = "0";
 			}
-			finished.push(parseInt(answerChar));
+			puzzle += res;
 		}
         try{
-            let createdGame = await this.state.contract.methods.createGame(puzzle, finished, 20).send({from:this.state.accounts[0]});
-            console.log("Created Game: "+createdGame);
-            if(createdGame){
-                this.joinGame(id);
-            }
+            let createdGame = await this.state.contract.methods.createPuzzle(results, puzzle, 20).send({from:this.state.accounts[0]});
         }catch(err){
             console.log('Error: '+err);
         }
