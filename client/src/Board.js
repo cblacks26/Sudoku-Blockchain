@@ -4,17 +4,7 @@ class Board extends Component {
     constructor(props){
       	super(props);
       	this.state = {
-        	positions: [
-				[1,2,3,4,5,6,7,8,9],
-				[1,2,3,4,5,6,7,8,9],
-				[1,2,3,4,5,6,7,8,9],
-				[1,2,3,4,5,6,7,8,9],
-				[1,2,3,4,5,6,7,8,9],
-				[1,2,3,4,5,6,7,8,9],
-				[1,2,3,4,5,6,7,8,9],
-				[1,2,3,4,5,6,7,8,9],
-				[1,2,3,4,5,6,7,8,9]
-        	]
+        	positions: []
       	}
 	}
 	
@@ -23,13 +13,9 @@ class Board extends Component {
 			let board = await this.props.contract.methods.displayInitialPuzzle().call({from:this.props.accounts[0]});
 			let pos = [];
 			let index = 0;
-			while(index<board.length){
-				let temp = [];
-				while(temp.length<9){
-					temp.push(board[index]);
-					index++;
-				}	
-				pos.push(temp);
+			for(let char in board){
+				let val = parseInt(char);
+				pos.push(val);
 			}
 			this.setState({ positions:pos });
 		}catch(err){
@@ -37,20 +23,29 @@ class Board extends Component {
 		}
 	}
     
-    updateBoard(pos,value){
+    async updateBoard(pos,value){
       	try {
-        	this.props.contract.methods.makeMove(pos,value).send({
+        	let result = await this.props.contract.methods.makeMove(pos,value).send({
             	from: this.props.accounts[0]
-        	});
+			});
+			if(result){
+				this.setState(prevState => ({
+					positions: {
+						...prevState.positions,
+						[prevState.positions[pos]]: value,
+					},
+				}));
+			}
       	} catch (err) {
           	console.log("Failed to make move");
       	}
     }
   
-    renderBlock(x,block){
+    renderBlock(block){
 		let result = [];
-		for(let i = 0; i < block.length;i++){
-			result.push(this.renderSquare(x,i,block[i]));
+		let offset = block*9;
+		for(let i = offset; i < offset+9;i++){
+			result.push(this.renderSquare(i));
 		}
 		return (
 			<div className="block">
@@ -62,24 +57,24 @@ class Board extends Component {
     renderBoard(){
 		let result= [];
 		for(let i = 0; i < this.state.positions.length;i++){
-			result.push(this.renderBlock(i,this.state.positions[i]));
+			result.push(this.renderBlock(i));
 		}
 		return (
-			<div className="block">
+			<tr>
 				{result}
-			</div>
+			</tr>
 		);
     }
     
-    renderSquare(x,y,i) {
-      	return <Square x={x} y={y} val={i} updateBoard={this.updateBoard} />;
+    renderSquare(i) {
+      	return <Square pos={i} val={this.state.positions[i]} updateBoard={this.updateBoard} />;
     }
   
     render() {
       	return (
-			<div className="game-board">
-			{this.renderBoard()}
-			</div>
+			<table>
+				{this.renderBoard()}
+			</table>
 		);
     }
 }
