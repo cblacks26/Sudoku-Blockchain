@@ -6,8 +6,10 @@ contract Solved {
     // Remember: simple variables can be viewed with a CALL without having to define a getter function
 
     address internal creator;
-    string public initialPuzzle;
-    string public solvedPuzzle;
+    uint256[] initialPuzzle;
+    uint256[] solutionPuzzle;
+    uint empty;
+    bool activeGame;
     //Constructor
 
     // Set up state variables
@@ -17,21 +19,46 @@ contract Solved {
 
     //functions
 
-    function createPuzzle(string solution, string initial) public {
-        address _addr = msg.sender;
+    function createPuzzle(uint256[] solution, uint256[] initial, uint initialempty) public {
         //set puzzle
-        initialPuzzle = initial; //eg. ........7......12.................4..9..3....617...95....3........7.........5..6
-        solvedPuzzle = solution; //eg. 916342758734856912528917643257189364489563271361724895695231487142678539873495126
+        initialPuzzle = initial;
+        solutionPuzzle = solution;
+        empty = initialempty;
+        activeGame = true;
     }
 
 
-    function displayInitialPuzzle() public view returns(string){
+    function displayInitialPuzzle() public view returns(uint256[]){
         return initialPuzzle;
     }
 
-    function displaySolvedPuzzle() public view returns(string){
-        return solvedPuzzle;
+    function displaySolvedPuzzle() public view returns(uint256[]){
+        return solutionPuzzle;
     }
+
+    function makeMove(uint pos, uint256 x) public returns(bool){
+        if(solutionPuzzle[pos-1] == x){
+            empty--;
+            if(empty==0){
+                endGame();
+                return true;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    function checkActiveGame() view returns(bool){
+        return activeGame;
+    }
+
+    function endGame(){
+        activeGame = false;
+        initialPuzzle = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        solutionPuzzle = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    }
+
+
 
 
 }
