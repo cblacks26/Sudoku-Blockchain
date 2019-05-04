@@ -3,7 +3,8 @@ html, body {
   }
 
   table {
-	border: 2px solid #000000;
+  border: 2px solid #000000;
+  margin:0 auto;
   }
 
   td {
@@ -75,7 +76,7 @@ html, body {
 .container{
   width:60%;
   height:60%;
-  margin:20% auto;
+  margin:10% auto;
 }
 
 .center{

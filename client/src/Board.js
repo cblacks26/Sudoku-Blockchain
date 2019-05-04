@@ -5,16 +5,16 @@ class Board extends Component {
       	super(props);
       	this.state = {
         	positions: []
-      	}
+		}
+		this.updateBoard = this.updateBoard.bind(this);
 	}
 	
 	async componentDidMount(){
 		try{
 			let board = await this.props.contract.methods.displayInitialPuzzle().call({from:this.props.accounts[0]});
 			let pos = [];
-			let index = 0;
-			for(let char in board){
-				let val = parseInt(char);
+			for(let i = 0; i < board.length;i++){
+				let val = parseInt(board[i]);
 				pos.push(val);
 			}
 			this.setState({ positions:pos });
@@ -25,19 +25,20 @@ class Board extends Component {
     
     async updateBoard(pos,value){
       	try {
+			console.log(typeof pos)
+			console.log(typeof value)
+			console.log("Move at "+pos+" Value: "+value)
         	let result = await this.props.contract.methods.makeMove(pos,value).send({
             	from: this.props.accounts[0]
 			});
+			console.log(result);
 			if(result){
-				this.setState(prevState => ({
-					positions: {
-						...prevState.positions,
-						[prevState.positions[pos]]: value,
-					},
-				}));
+				let newPos = [...this.state.positions];
+				newPos[pos] = value;
+				this.setState({positions: newPos});
 			}
       	} catch (err) {
-          	console.log("Failed to make move");
+          	console.log(err);
       	}
     }
   
@@ -48,21 +49,21 @@ class Board extends Component {
 			result.push(this.renderSquare(i));
 		}
 		return (
-			<div className="block">
+			<tr>
 				{result}
-			</div>
+			</tr>
 		);
     }
     
     renderBoard(){
 		let result= [];
-		for(let i = 0; i < this.state.positions.length;i++){
+		for(let i = 0; i < 9;i++){
 			result.push(this.renderBlock(i));
 		}
 		return (
-			<tr>
+			<table>
 				{result}
-			</tr>
+			</table>
 		);
     }
     

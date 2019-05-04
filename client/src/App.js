@@ -31,7 +31,9 @@ class App extends Component {
             // Get the contract instance.
             const networkId = await web3.eth.net.getId();
             const deployedNetwork = Solved.networks[networkId];
-            const instance = new web3.eth.Contract(Solved.abi,deployedNetwork && deployedNetwork.address,);
+			const instance = new web3.eth.Contract(Solved.abi,deployedNetwork && deployedNetwork.address,{
+				defaultGas: 300000000000
+			});
 
             // Set web3, accounts, and contract to the state, and then proceed with an
             // example of interacting with the contract's methods.
@@ -62,20 +64,25 @@ class App extends Component {
     }
 
     async createGame(){
-        let board = randomPuzzle(20);
+		let difficutly = 35;
+		let board = randomPuzzle(difficutly);
+		let count = 81-difficutly;
         let values = solve(board);
-        let results = vals(values);
+		let results = vals(values);
+		let finished = "";
         let puzzle = "";
-		for(let char in board){
-			let res = char;
-			if(char==='.'){
-                res = "0";
+		for(let i = 0; i < board.length; i++){
+			let puz = board[i];
+			if(puz==='.'){
+                puz = "0";
 			}
-			puzzle += res;
+			puzzle += puz;
+			finished += results[i];
 		}
         try{
-            let createdGame = await this.state.contract.methods.createPuzzle(results, puzzle, 20).send({from:this.state.accounts[0]});
-        }catch(err){
+            let createdGame = await this.state.contract.methods.createPuzzle(finished, puzzle, count).send({from:this.state.accounts[0]});
+			this.setState({ game: createdGame });
+		}catch(err){
             console.log('Error: '+err);
         }
     }

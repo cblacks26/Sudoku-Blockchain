@@ -6,7 +6,7 @@ class Square extends Component {
     }
     
     async updateSquare(event){
-		let result = await this.props.updateBoard(this.state.pos,event.target.value);
+		let result = await this.props.updateBoard(this.props.pos,event.target.value);
 		if(!result){
 			this.setState({ value: 0 });
 		}
@@ -17,9 +17,9 @@ class Square extends Component {
 		let val = this.props.val;
 		if(val==0) val="";
 		if(this.props.value>0){
-				return <input type="text" id={id} key={this.props.pos} defaultValue={this.state.value} disabled/>
+				return <input type="text" id={id} key={this.props.pos} defaultValue={val} disabled/>
 		}else{
-			return <input type="text" key={this.props.pos} pattern="[1-9]{1}" min="1" max="9"
+			return <input type="text" id={id} pattern="[1-9]{1}" min="1" max="9"
 				value={val} onChange={this.updateSquare} />
 		}
     }
