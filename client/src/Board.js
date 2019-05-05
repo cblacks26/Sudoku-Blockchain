@@ -61,13 +61,16 @@ class Board extends Component {
 				let msg = 'success:'+value+' at position '+pos+' is correct'
 				await this.addMessage(msg);
 				setTimeout(this.removeMessage,10000,msg);
+				return true;
 			}else{
 				let msg ='danger:'+value+' at position '+pos+' is incorrect';
 				await this.addMessage(msg);
 				setTimeout(this.removeMessage,10000,msg);
+				return false;
 			}
       	} catch (err) {
-          	console.log(err);
+			  console.log(err);
+			  return false;
       	}
     }
   
