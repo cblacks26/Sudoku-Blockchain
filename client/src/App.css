@@ -2,10 +2,10 @@ html, body {
 	background-color: #FAFAFA
   }
 
-  table {
-  border: 2px solid #000000;
-  margin:0 auto;
-  }
+table {
+  	border: 2px solid #000000;
+	width:45%;
+}
 
   td {
 	border: 1px solid #000000;
@@ -23,6 +23,10 @@ html, body {
 	font-size: 24px;
 	background-color: #FFFFFF;
 	outline: none;
+  }
+
+  input.submitted{
+    background-color: #ffeeba;
   }
 
   input:disabled {
@@ -74,11 +78,21 @@ html, body {
   #cell-78, #cell-79, #cell-80 { border-bottom: 2px solid #000000; }
   #cell-60, #cell-69, #cell-78 { border-left:   2px solid #000000; }
 .container{
-  width:60%;
-  height:60%;
-  margin:10% auto;
+  	width:80%;
+  	height:60%;
+  	margin:10% auto;
+}
+
+.game-container{
+	display: flex;
+	flex-direction: row;
 }
 
 .center{
-  text-align: center;
+  	text-align: center;
+}
+
+.messages{
+	width:45%;
+	padding-left: 1em;
 }

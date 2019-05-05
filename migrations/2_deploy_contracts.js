@@ -1,5 +1,5 @@
-var SudokuMain = artifacts.require("Sudoku");
+var Solved = artifacts.require("Solved");
 
 module.exports = function(deployer) {
-  deployer.deploy(SudokuMain);
+  deployer.deploy(Solved);
 };
